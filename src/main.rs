@@ -1,48 +1,19 @@
-#[cxx::bridge(namespace = "org::blobstore")]
+use std::pin::Pin;
+
+#[cxx::bridge(namespace = "drake_bridge")]
 mod ffi {
-    // Shared structs with fields visible to both languages.
-    struct BlobMetadata {
-        size: usize,
-        tags: Vec<String>,
-    }
-
-    // Rust types and signatures exposed to C++.
-    extern "Rust" {
-        type MultiBuf;
-
-        fn next_chunk(buf: &mut MultiBuf) -> &[u8];
-    }
-
-    // C++ types and signatures exposed to Rust.
     unsafe extern "C++" {
         include!("drake-sys/ffi/include/drake_ffi.h");
 
-        type BlobstoreClient;
+        type MultibodyPlant64;
 
-        fn new_blobstore_client() -> UniquePtr<BlobstoreClient>;
-        fn put(&self, parts: &mut MultiBuf) -> u64;
-        fn tag(&self, blobid: u64, tag: &str);
-        fn metadata(&self, blobid: u64) -> BlobMetadata;
+        fn new_multibody_plant_64(ts: f64) -> UniquePtr<MultibodyPlant64>;
 
-        fn wat();
+        fn multibody_plant_finalize(plant: Pin<&mut MultibodyPlant64>);
     }
 }
 
-// An iterator over contiguous chunks of a discontiguous file object.
-//
-// Toy implementation uses a Vec<Vec<u8>> but in reality this might be iterating
-// over some more complex Rust data structure like a rope, or maybe loading
-// chunks lazily from somewhere.
-pub struct MultiBuf {
-    chunks: Vec<Vec<u8>>,
-    pos: usize,
-}
-pub fn next_chunk(buf: &mut MultiBuf) -> &[u8] {
-    let next = buf.chunks.get(buf.pos);
-    buf.pos += 1;
-    next.map_or(&[], Vec::as_slice)
-}
-
 fn main() {
-    ffi::wat()
+    let mut plant = ffi::new_multibody_plant_64(2.);
+    ffi::multibody_plant_finalize(plant.as_mut().unwrap());
 }

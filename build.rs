@@ -16,6 +16,8 @@ fn main() {
 
     cxx_build::bridge("src/main.rs")
         .include("drake/include")
+        .include("eigen/include/eigen3")
+        .include("fmt/include")
         .file("ffi/drake_ffi.cc")
         .flag("-std=c++20")
         .compile("drake_ffi");

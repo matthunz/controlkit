@@ -1,28 +1,13 @@
 #pragma once
 #include "rust/cxx.h"
 #include <memory>
+#include "drake/multibody/plant/multibody_plant.h"
 
-namespace org {
-namespace blobstore {
+namespace drake_bridge
+{
+  using MultibodyPlant64 = drake::multibody::MultibodyPlant<double>;
 
-struct MultiBuf;
-struct BlobMetadata;
+  std::unique_ptr<MultibodyPlant64> new_multibody_plant_64(double ts);
 
-class BlobstoreClient {
-public:
-  BlobstoreClient();
-  uint64_t put(MultiBuf &buf) const;
-  void tag(uint64_t blobid, rust::Str tag) const;
-  BlobMetadata metadata(uint64_t blobid) const;
-
-private:
-  class impl;
-  std::shared_ptr<impl> impl;
-};
-
-std::unique_ptr<BlobstoreClient> new_blobstore_client();
-
-void wat();
-
-} // namespace blobstore
-} // namespace org
+  void multibody_plant_finalize(MultibodyPlant64& plant);
+}
