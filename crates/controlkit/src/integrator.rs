@@ -14,7 +14,9 @@ impl Default for Integrator {
 }
 
 impl System for Integrator {
-    fn add(self, builder: &mut DiagramBuilder) {
+    type Handle = ();
+
+    fn add(self, builder: &mut DiagramBuilder) -> Self::Handle {
         drake_sys::diagram_builder_add_system_integrator(builder.raw.as_mut().unwrap(), self.raw);
     }
 }

@@ -7,6 +7,11 @@ mod ffi {
 
         fn new_multibody_plant_64(ts: f64) -> UniquePtr<MultibodyPlant64>;
 
+        fn multibody_plant_calc_total_mass_diagram(
+            plant: &MultibodyPlant64,
+            diagram: &Diagram64,
+        ) -> f64;
+
         fn multibody_plant_finalize(plant: Pin<&mut MultibodyPlant64>);
 
         type Diagram64;
@@ -31,7 +36,7 @@ mod ffi {
         fn diagram_builder_add_system_multibody_plant(
             builder: Pin<&mut DiagramBuilder64>,
             plant: UniquePtr<MultibodyPlant64>,
-        );
+        ) -> *mut MultibodyPlant64;
 
     }
 }

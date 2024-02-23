@@ -12,8 +12,8 @@ impl DiagramBuilder {
         }
     }
 
-    pub fn add_system(&mut self, system: impl System) {
-        system.add(self);
+    pub fn add_system<S: System>(&mut self, system: S) -> S::Handle {
+        system.add(self)
     }
 
     pub fn build(&mut self) -> Diagram {

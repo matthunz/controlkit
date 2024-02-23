@@ -8,6 +8,12 @@ namespace drake_bridge
     return std::unique_ptr<MultibodyPlant64>(new MultibodyPlant64(ts));
   }
 
+  double multibody_plant_calc_total_mass_diagram(const MultibodyPlant64 &plant, const Diagram64 &diagram)
+  {
+    auto cx = diagram.CreateDefaultContext();
+    return plant.CalcTotalMass(plant.GetMyContextFromRoot(*cx));
+  }
+
   void multibody_plant_finalize(MultibodyPlant64 &plant)
   {
     plant.Finalize();
@@ -28,9 +34,9 @@ namespace drake_bridge
     builder.AddSystem(std::move(integrator));
   }
 
-  void diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant)
+  MultibodyPlant64* diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant)
   {
-    builder.AddSystem(std::move(plant));
+    return builder.AddSystem(std::move(plant));
   }
 
   std::unique_ptr<Diagram64> diagram_builder_build(DiagramBuilder64 &builder)

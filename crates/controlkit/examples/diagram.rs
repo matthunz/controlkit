@@ -6,8 +6,10 @@ fn main() {
 
     let mut builder = Diagram::builder();
     builder.add_system(Integrator::default());
-    builder.add_system(plant);
+    let plant_handle = builder.add_system(plant);
 
     let diagram = builder.build();
     print!("{}", diagram.graphviz());
+
+    dbg!(plant_handle.total_mass(&diagram));
 }

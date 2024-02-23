@@ -9,5 +9,7 @@ mod multibody_plant;
 pub use multibody_plant::MultibodyPlant;
 
 pub trait System {
-    fn add(self, builder: &mut DiagramBuilder);
+    type Handle;
+
+    fn add(self, builder: &mut DiagramBuilder) -> Self::Handle;
 }
