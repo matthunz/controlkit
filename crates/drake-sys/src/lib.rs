@@ -17,7 +17,16 @@ mod ffi {
 
         fn diagram_builder_build(builder: Pin<&mut DiagramBuilder64>) -> UniquePtr<Diagram64>;
 
-        fn diagram_get_graphviz_string(builder: &Diagram64) -> String;
+        fn diagram_get_graphviz_string(diagram: &Diagram64) -> String;
+
+        type Integrator;
+
+        fn new_integrator() -> UniquePtr<Integrator>;
+
+        fn diagram_builder_add_system_integrator(
+            builder: Pin<&mut DiagramBuilder64>,
+            integrator: UniquePtr<Integrator>,
+        );
     }
 }
 

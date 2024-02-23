@@ -18,6 +18,16 @@ namespace drake_bridge
     return std::unique_ptr<DiagramBuilder64>(new DiagramBuilder64());
   }
 
+  std::unique_ptr<Integrator> new_integrator()
+  {
+    return std::make_unique<Integrator>(2.);
+  }
+
+  void diagram_builder_add_system_integrator(DiagramBuilder64 &builder, std::unique_ptr<Integrator> integrator)
+  {
+    builder.AddSystem(std::move(integrator));
+  }
+
   std::unique_ptr<Diagram64> diagram_builder_build(DiagramBuilder64 &builder)
   {
     return std::unique_ptr(builder.Build());

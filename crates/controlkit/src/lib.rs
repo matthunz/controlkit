@@ -11,6 +11,10 @@ impl DiagramBuilder {
         }
     }
 
+    pub fn add_system(&mut self, system: impl System) {
+        system.add(self);
+    }
+
     pub fn build(&mut self) -> Diagram {
         Diagram {
             raw: drake_sys::diagram_builder_build(self.raw.as_mut().unwrap()),
@@ -42,5 +46,27 @@ impl MultibodyPlant {
     pub fn finalize(&mut self) {
         let ptr = self.raw.as_mut().unwrap();
         drake_sys::multibody_plant_finalize(ptr)
+    }
+}
+
+pub trait System {
+    fn add(self, builder: &mut DiagramBuilder);
+}
+
+pub struct Integrator {
+    raw: UniquePtr<drake_sys::Integrator>,
+}
+
+impl Default for Integrator {
+    fn default() -> Self {
+        Self {
+            raw: drake_sys::new_integrator(),
+        }
+    }
+}
+
+impl System for Integrator {
+    fn add(self, builder: &mut DiagramBuilder) {
+        drake_sys::diagram_builder_add_system_integrator(builder.raw.as_mut().unwrap(), self.raw);
     }
 }

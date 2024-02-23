@@ -2,6 +2,7 @@
 #include "rust/cxx.h"
 #include "drake/multibody/plant/multibody_plant.h"
 #include "drake/systems/framework/diagram_builder.h"
+#include "drake/systems/primitives/integrator.h"
 
 namespace drake_bridge
 {
@@ -18,6 +19,12 @@ namespace drake_bridge
   std::unique_ptr<DiagramBuilder64> new_diagram_builder_64();
 
   std::unique_ptr<Diagram64> diagram_builder_build(DiagramBuilder64 &builder);
+
+  using Integrator = drake::systems::Integrator<double>;
+
+  std::unique_ptr<Integrator> new_integrator();
+
+  void diagram_builder_add_system_integrator(DiagramBuilder64 &builder, std::unique_ptr<Integrator> integrator);
 
   rust::string diagram_get_graphviz_string(const Diagram64 &diagram);
 }
