@@ -94,3 +94,15 @@ impl System for MultibodyPlant {
         MultibodyPlantHandle { ptr }
     }
 }
+
+pub struct InverseKinematics {
+    ptr: UniquePtr<drake_sys::InverseKinematics>,
+}
+
+impl InverseKinematics {
+    pub fn new(plant: &MultibodyPlantHandle) -> Self {
+        Self {
+            ptr: drake_sys::new_inverse_kinematics(unsafe { &*plant.ptr }),
+        }
+    }
+}

@@ -72,6 +72,10 @@ mod ffi {
         type Frame64;
 
         fn revolute_joint_frame_on_parent(body: &RevoluteJoint64) -> &'static Frame64;
+
+        type InverseKinematics;
+
+        fn new_inverse_kinematics(plant: &MultibodyPlant64) -> UniquePtr<InverseKinematics>;
     }
 }
 

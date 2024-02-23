@@ -1,4 +1,4 @@
-use controlkit::{Diagram, Integrator, MultibodyPlant, SpatialInertia};
+use controlkit::{Diagram, Integrator, InverseKinematics, MultibodyPlant, SpatialInertia};
 use nalgebra::Vector3;
 
 fn main() {
@@ -23,6 +23,8 @@ fn main() {
     print!("{}", diagram.graphviz());
 
     joint1.frame_on_parent();
+
+    let _ik = InverseKinematics::new(&plant_handle);
 
     dbg!(plant_handle.total_mass(&diagram));
 }

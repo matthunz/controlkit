@@ -5,20 +5,20 @@
 #include "drake/systems/primitives/integrator.h"
 #include "Eigen/Core"
 #include "drake/multibody/tree/revolute_joint.h"
-
+#include <drake/multibody/inverse_kinematics/inverse_kinematics.h>
 
 namespace drake_bridge
 {
   using MultibodyPlant64 = drake::multibody::MultibodyPlant<double>;
 
   using Diagram64 = drake::systems::Diagram<double>;
-
   using DiagramBuilder64 = drake::systems::DiagramBuilder<double>;
-
 
   using RigidBody64 = drake::multibody::RigidBody<double>;
   using Frame64 = drake::multibody::Frame<double>;
   using RevoluteJoint64 = drake::multibody::RevoluteJoint<double>;
+
+  using InverseKinematics  = drake::multibody::InverseKinematics;
 
   std::unique_ptr<MultibodyPlant64> new_multibody_plant_64(double ts);
 
@@ -56,7 +56,11 @@ namespace drake_bridge
 
 
 
-  /* --------------------Frame-------------------- */
+  /* -------------------------------Frame------------------------------- */
 
-   const Frame64& revolute_joint_frame_on_parent(const RevoluteJoint64 &joint);
+  const Frame64& revolute_joint_frame_on_parent(const RevoluteJoint64 &joint);
+
+  /* -------------------------InverseKinematics------------------------- */
+
+  std::unique_ptr<InverseKinematics> new_inverse_kinematics(const MultibodyPlant64& plant);
 }

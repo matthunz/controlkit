@@ -3,6 +3,7 @@
 #include "Eigen/Core"
 #include "Eigen/Dense"
 #include "drake/multibody/tree/revolute_joint.h"
+#include <drake/multibody/inverse_kinematics/inverse_kinematics.h>
 
 namespace drake_bridge
 {
@@ -82,5 +83,14 @@ namespace drake_bridge
   const Frame64& revolute_joint_frame_on_parent(const RevoluteJoint64 &joint)
   {
     return joint.frame_on_parent();
+  }
+
+
+
+  /* -------------------------InverseKinematics------------------------- */
+
+  std::unique_ptr<InverseKinematics> new_inverse_kinematics(const MultibodyPlant64& plant)
+  {
+    return std::make_unique<InverseKinematics>(plant, true);
   }
 }

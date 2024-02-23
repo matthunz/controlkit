@@ -8,7 +8,7 @@ mod integrator;
 pub use self::integrator::Integrator;
 
 mod multibody_plant;
-pub use multibody_plant::MultibodyPlant;
+pub use multibody_plant::{InverseKinematics, MultibodyPlant, MultibodyPlantHandle};
 
 pub trait System {
     type Handle;
