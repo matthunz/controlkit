@@ -20,6 +20,7 @@ fn main() {
         .include("fmt/include")
         .file("ffi/drake_ffi.cc")
         .flag("-std=c++20")
+        .warnings(false)
         .compile("drake_ffi");
 
     println!(

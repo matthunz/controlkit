@@ -1,5 +1,6 @@
 use crate::{diagram::DiagramBuilder, Diagram, SpatialInertia, System};
 use cxx::UniquePtr;
+use nalgebra::UnitVector3;
 
 #[derive(Clone, Copy)]
 pub struct RigidBody {
@@ -31,11 +32,21 @@ impl MultibodyPlant {
         }
     }
 
-    pub fn add_revolute_joint(&mut self, name: impl Into<String>, body: RigidBody) -> &mut Self {
+    pub fn add_revolute_joint(
+        &mut self,
+        name: impl Into<String>,
+        parent: RigidBody,
+        child: RigidBody,
+        axis: UnitVector3<f64>,
+    ) -> &mut Self {
         drake_sys::multibody_plant_add_revolute_joint(
             self.raw.as_mut().unwrap(),
             name.into(),
-            body.raw,
+            parent.raw,
+            child.raw,
+            axis.x,
+            axis.y,
+            axis.z,
         );
         self
     }

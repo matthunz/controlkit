@@ -22,9 +22,10 @@ namespace drake_bridge
     return plant.AddRigidBody(std::string(name), inertia);
   }
 
-   void multibody_plant_add_revolute_joint(MultibodyPlant64 &plant,  rust::String name, const RigidBody64&  body)
+  void multibody_plant_add_revolute_joint(MultibodyPlant64 &plant,  rust::String name, const RigidBody64&  body_a, const RigidBody64&  body_b, double x, double y, double z)
   {
-    plant.AddJoint<drake::multibody::RevoluteJoint>(std::string(name), plant.world_body(), {}, body, {}, Eigen::Vector3d::UnitZ());
+    Eigen::Vector3d v(x, y, z);
+    plant.AddJoint<drake::multibody::RevoluteJoint>(std::string(name), body_a, {}, body_b, {}, v);
   }
 
   void multibody_plant_finalize(MultibodyPlant64 &plant)

@@ -34,7 +34,7 @@ namespace drake_bridge
 
   const RigidBody64& multibody_plant_add_rigid_body(MultibodyPlant64 &plant, rust::string name, const SpatialInertia &inertia);
 
-  void multibody_plant_add_revolute_joint(MultibodyPlant64 &plant, rust::String name,   const RigidBody64&  body);
+  void multibody_plant_add_revolute_joint(MultibodyPlant64 &plant, rust::String name, const RigidBody64&  body_a, const RigidBody64&  body_b, double x, double y, double z);
 
   void multibody_plant_finalize(MultibodyPlant64 &plant);
 

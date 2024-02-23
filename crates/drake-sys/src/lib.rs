@@ -34,7 +34,11 @@ mod ffi {
         fn multibody_plant_add_revolute_joint(
             plant: Pin<&mut MultibodyPlant64>,
             name: String,
-            body: &RigidBody64,
+            parent: &RigidBody64,
+            child: &RigidBody64,
+            x: f64,
+            y: f64,
+            z: f64,
         );
 
         fn multibody_plant_finalize(plant: Pin<&mut MultibodyPlant64>);

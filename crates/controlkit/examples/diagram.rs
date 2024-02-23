@@ -7,11 +7,11 @@ fn main() {
         "body1",
         &SpatialInertia::point_mass(20., Vector3::default()),
     );
-    let _body2 = plant.add_rigid_body(
+    let body2 = plant.add_rigid_body(
         "body2",
         &SpatialInertia::point_mass(20., Vector3::default()),
     );
-    plant.add_revolute_joint("join1", body1);
+    plant.add_revolute_joint("joint1", body1, body2, Vector3::z_axis());
 
     plant.finalize();
 
