@@ -7,6 +7,7 @@
 #include <drake/solvers/mathematical_program.h>
 #include <drake/solvers/mathematical_program_result.h>
 #include <drake/solvers/snopt_solver.h>
+#include <drake/multibody/parsing/parser.h>
 
 namespace drake_bridge
 {
@@ -30,6 +31,11 @@ namespace drake_bridge
   {
     Eigen::Vector3d v(x, y, z);
     return plant.AddJoint<drake::multibody::RevoluteJoint>(std::string(name), body_a, {}, body_b, {}, v);
+  }
+
+  void multibody_plant_add_urdf(MultibodyPlant64 &plant, rust::String urdf)
+  {
+     drake::multibody::Parser(&plant).AddModelsFromString(std::string(urdf), "urdf");
   }
 
   void multibody_plant_finalize(MultibodyPlant64 &plant)
@@ -81,7 +87,11 @@ namespace drake_bridge
     return std::make_unique<SpatialInertia>(SpatialInertia::PointMass(mass, com));
   }
 
-
+  std::unique_ptr<SpatialInertia> new_spatial_inertia_solid_cylinder_with_mass(double mass, double radius, double length, double x, double y, double z)
+  {
+    Eigen::Vector3d v(x, y, z);
+    return std::make_unique<SpatialInertia>(SpatialInertia::SolidCylinderWithMass(mass, radius, length, v));
+  }
 
   const Frame64& revolute_joint_frame_on_parent(const RevoluteJoint64 &joint)
   {
@@ -94,7 +104,7 @@ namespace drake_bridge
 
   std::unique_ptr<InverseKinematics> new_inverse_kinematics(const MultibodyPlant64& plant)
   {
-    return std::make_unique<InverseKinematics>(plant, true);
+    return std::make_unique<InverseKinematics>(plant, false);
   }
 
   rust::Vec<double> inverse_kinematics_solve(const InverseKinematics& ik, const MultibodyPlant64& plant) {
@@ -102,9 +112,9 @@ namespace drake_bridge
     Eigen::VectorXd initial_guess = Eigen::VectorXd::Zero(plant.num_positions());
 
     drake::solvers::SnoptSolver solver;
-    drake::solvers::MathematicalProgramResult result = solver.Solve(ik.prog(), initial_guess);
+    drake::solvers::MathematicalProgramResult result = solver.Solve(ik.prog());
 
-    Eigen::VectorXd joint_positions = result.GetSolution();
+    Eigen::VectorXd joint_positions = result.GetSolution().transpose();
 
     rust::Vec<double> data;
     for (int i = 0; i < joint_positions.size(); ++i) {

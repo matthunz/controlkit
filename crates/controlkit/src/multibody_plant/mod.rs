@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use crate::{diagram::DiagramBuilder, Diagram, SpatialInertia, System};
 use cxx::UniquePtr;
 use nalgebra::UnitVector3;
@@ -65,6 +67,10 @@ impl MultibodyPlant {
             axis.z,
         );
         RevoluteJoint { ptr }
+    }
+
+    pub fn add_urdf(&mut self, urdf: impl Into<String>) {
+        drake_sys::multibody_plant_add_urdf(self.raw.as_mut().unwrap(), urdf.into())
     }
 
     pub fn finalize(&mut self) {

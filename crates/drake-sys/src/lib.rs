@@ -25,11 +25,22 @@ mod ffi {
             z: f64,
         ) -> UniquePtr<SpatialInertia>;
 
+        fn new_spatial_inertia_solid_cylinder_with_mass(
+            mass: f64,
+            radius: f64,
+            length: f64,
+            x: f64,
+            y: f64,
+            z: f64,
+        ) -> UniquePtr<SpatialInertia>;
+
         fn multibody_plant_add_rigid_body(
             plant: Pin<&mut MultibodyPlant64>,
             name: String,
             inertia: &SpatialInertia,
         ) -> &'static RigidBody64;
+
+        fn multibody_plant_add_urdf(plant: Pin<&mut MultibodyPlant64>, urdf: String);
 
         type RevoluteJoint64;
 
