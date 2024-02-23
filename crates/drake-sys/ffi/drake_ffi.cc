@@ -22,10 +22,10 @@ namespace drake_bridge
     return plant.AddRigidBody(std::string(name), inertia);
   }
 
-  void multibody_plant_add_revolute_joint(MultibodyPlant64 &plant,  rust::String name, const RigidBody64&  body_a, const RigidBody64&  body_b, double x, double y, double z)
+  const RevoluteJoint64& multibody_plant_add_revolute_joint(MultibodyPlant64 &plant,  rust::String name, const RigidBody64&  body_a, const RigidBody64&  body_b, double x, double y, double z)
   {
     Eigen::Vector3d v(x, y, z);
-    plant.AddJoint<drake::multibody::RevoluteJoint>(std::string(name), body_a, {}, body_b, {}, v);
+    return plant.AddJoint<drake::multibody::RevoluteJoint>(std::string(name), body_a, {}, body_b, {}, v);
   }
 
   void multibody_plant_finalize(MultibodyPlant64 &plant)
@@ -75,5 +75,12 @@ namespace drake_bridge
     Eigen::Vector3d com(x, y, z);
 
     return std::make_unique<SpatialInertia>(SpatialInertia::PointMass(mass, com));
+  }
+
+
+
+  const Frame64& revolute_joint_frame_on_parent(const RevoluteJoint64 &joint)
+  {
+    return joint.frame_on_parent();
   }
 }

@@ -2,9 +2,25 @@ use crate::{diagram::DiagramBuilder, Diagram, SpatialInertia, System};
 use cxx::UniquePtr;
 use nalgebra::UnitVector3;
 
+pub struct Frame {
+    ptr: &'static drake_sys::Frame64,
+}
+
 #[derive(Clone, Copy)]
 pub struct RigidBody {
     raw: &'static drake_sys::RigidBody64,
+}
+
+pub struct RevoluteJoint {
+    ptr: &'static drake_sys::RevoluteJoint64,
+}
+
+impl RevoluteJoint {
+    pub fn frame_on_parent(self) -> Frame {
+        Frame {
+            ptr: drake_sys::revolute_joint_frame_on_parent(self.ptr),
+        }
+    }
 }
 
 pub struct MultibodyPlant {
@@ -38,8 +54,8 @@ impl MultibodyPlant {
         parent: RigidBody,
         child: RigidBody,
         axis: UnitVector3<f64>,
-    ) -> &mut Self {
-        drake_sys::multibody_plant_add_revolute_joint(
+    ) -> RevoluteJoint {
+        let ptr = drake_sys::multibody_plant_add_revolute_joint(
             self.raw.as_mut().unwrap(),
             name.into(),
             parent.raw,
@@ -48,7 +64,7 @@ impl MultibodyPlant {
             axis.y,
             axis.z,
         );
-        self
+        RevoluteJoint { ptr }
     }
 
     pub fn finalize(&mut self) {

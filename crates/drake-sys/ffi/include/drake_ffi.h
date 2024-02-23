@@ -4,6 +4,8 @@
 #include "drake/systems/framework/diagram_builder.h"
 #include "drake/systems/primitives/integrator.h"
 #include "Eigen/Core"
+#include "drake/multibody/tree/revolute_joint.h"
+
 
 namespace drake_bridge
 {
@@ -15,8 +17,8 @@ namespace drake_bridge
 
 
   using RigidBody64 = drake::multibody::RigidBody<double>;
-
-
+  using Frame64 = drake::multibody::Frame<double>;
+  using RevoluteJoint64 = drake::multibody::RevoluteJoint<double>;
 
   std::unique_ptr<MultibodyPlant64> new_multibody_plant_64(double ts);
 
@@ -34,7 +36,7 @@ namespace drake_bridge
 
   const RigidBody64& multibody_plant_add_rigid_body(MultibodyPlant64 &plant, rust::string name, const SpatialInertia &inertia);
 
-  void multibody_plant_add_revolute_joint(MultibodyPlant64 &plant, rust::String name, const RigidBody64&  body_a, const RigidBody64&  body_b, double x, double y, double z);
+  const RevoluteJoint64& multibody_plant_add_revolute_joint(MultibodyPlant64 &plant, rust::String name, const RigidBody64&  body_a, const RigidBody64&  body_b, double x, double y, double z);
 
   void multibody_plant_finalize(MultibodyPlant64 &plant);
 
@@ -51,4 +53,10 @@ namespace drake_bridge
   MultibodyPlant64 *diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant);
 
   rust::string diagram_get_graphviz_string(const Diagram64 &diagram);
+
+
+
+  /* --------------------Frame-------------------- */
+
+   const Frame64& revolute_joint_frame_on_parent(const RevoluteJoint64 &joint);
 }

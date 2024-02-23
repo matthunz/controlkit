@@ -31,6 +31,8 @@ mod ffi {
             inertia: &SpatialInertia,
         ) -> &'static RigidBody64;
 
+        type RevoluteJoint64;
+
         fn multibody_plant_add_revolute_joint(
             plant: Pin<&mut MultibodyPlant64>,
             name: String,
@@ -39,7 +41,7 @@ mod ffi {
             x: f64,
             y: f64,
             z: f64,
-        );
+        ) -> &'static RevoluteJoint64;
 
         fn multibody_plant_finalize(plant: Pin<&mut MultibodyPlant64>);
 
@@ -67,6 +69,9 @@ mod ffi {
             plant: UniquePtr<MultibodyPlant64>,
         ) -> *mut MultibodyPlant64;
 
+        type Frame64;
+
+        fn revolute_joint_frame_on_parent(body: &RevoluteJoint64) -> &'static Frame64;
     }
 }
 

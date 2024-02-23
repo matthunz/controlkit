@@ -11,7 +11,7 @@ fn main() {
         "body2",
         &SpatialInertia::point_mass(20., Vector3::default()),
     );
-    plant.add_revolute_joint("joint1", body1, body2, Vector3::z_axis());
+    let joint1 = plant.add_revolute_joint("joint1", body1, body2, Vector3::z_axis());
 
     plant.finalize();
 
@@ -21,6 +21,8 @@ fn main() {
 
     let diagram = builder.build();
     print!("{}", diagram.graphviz());
+
+    joint1.frame_on_parent();
 
     dbg!(plant_handle.total_mass(&diagram));
 }
