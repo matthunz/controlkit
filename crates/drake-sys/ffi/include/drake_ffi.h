@@ -13,6 +13,11 @@ namespace drake_bridge
 
   using DiagramBuilder64 = drake::systems::DiagramBuilder<double>;
 
+
+  using RigidBody64 = drake::multibody::RigidBody<double>;
+
+
+
   std::unique_ptr<MultibodyPlant64> new_multibody_plant_64(double ts);
 
   double multibody_plant_calc_total_mass_diagram(const MultibodyPlant64 &plant, const Diagram64 &diagram);
@@ -27,7 +32,9 @@ namespace drake_bridge
 
 
 
-  void multibody_plant_add_rigid_body(rust::string name, MultibodyPlant64 &plant, const SpatialInertia &inertia);
+  const RigidBody64& multibody_plant_add_rigid_body(MultibodyPlant64 &plant, rust::string name, const SpatialInertia &inertia);
+
+  void multibody_plant_add_revolute_joint(MultibodyPlant64 &plant, rust::String name,   const RigidBody64&  body);
 
   void multibody_plant_finalize(MultibodyPlant64 &plant);
 

@@ -27,5 +27,6 @@ fn main() {
         env!("CARGO_MANIFEST_DIR")
     );
     println!("cargo:rustc-link-lib=drake");
+    println!("cargo:rustc-link-lib=fmt");
     println!("cargo:rerun-if-changed=src/lib.rs");
 }

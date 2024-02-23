@@ -1,6 +1,11 @@
 use crate::{diagram::DiagramBuilder, Diagram, SpatialInertia, System};
 use cxx::UniquePtr;
 
+#[derive(Clone, Copy)]
+pub struct RigidBody {
+    raw: &'static drake_sys::RigidBody64,
+}
+
 pub struct MultibodyPlant {
     raw: UniquePtr<drake_sys::MultibodyPlant64>,
 }
@@ -16,11 +21,21 @@ impl MultibodyPlant {
         &mut self,
         name: impl Into<String>,
         inertia: &SpatialInertia,
-    ) -> &mut Self {
-        drake_sys::multibody_plant_add_rigid_body(
-            name.into(),
+    ) -> RigidBody {
+        RigidBody {
+            raw: drake_sys::multibody_plant_add_rigid_body(
+                self.raw.as_mut().unwrap(),
+                name.into(),
+                &inertia.raw,
+            ),
+        }
+    }
+
+    pub fn add_revolute_joint(&mut self, name: impl Into<String>, body: RigidBody) -> &mut Self {
+        drake_sys::multibody_plant_add_revolute_joint(
             self.raw.as_mut().unwrap(),
-            &inertia.raw,
+            name.into(),
+            body.raw,
         );
         self
     }

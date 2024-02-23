@@ -14,6 +14,8 @@ mod ffi {
 
         type SpatialInertia;
 
+        type RigidBody64;
+
         fn new_spatial_inertia() -> UniquePtr<SpatialInertia>;
 
         fn new_spatial_inertia_point_mass(
@@ -24,9 +26,15 @@ mod ffi {
         ) -> UniquePtr<SpatialInertia>;
 
         fn multibody_plant_add_rigid_body(
-            name: String,
             plant: Pin<&mut MultibodyPlant64>,
+            name: String,
             inertia: &SpatialInertia,
+        ) -> &'static RigidBody64;
+
+        fn multibody_plant_add_revolute_joint(
+            plant: Pin<&mut MultibodyPlant64>,
+            name: String,
+            body: &RigidBody64,
         );
 
         fn multibody_plant_finalize(plant: Pin<&mut MultibodyPlant64>);

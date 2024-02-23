@@ -2,6 +2,7 @@
 #include "rust/cxx.h"
 #include "Eigen/Core"
 #include "Eigen/Dense"
+#include "drake/multibody/tree/revolute_joint.h"
 
 namespace drake_bridge
 {
@@ -16,9 +17,14 @@ namespace drake_bridge
     return plant.CalcTotalMass(plant.GetMyContextFromRoot(*cx));
   }
 
-  void multibody_plant_add_rigid_body(rust::String name, MultibodyPlant64 &plant, const SpatialInertia &inertia)
+  const RigidBody64& multibody_plant_add_rigid_body(MultibodyPlant64 &plant, rust::String name, const SpatialInertia &inertia)
   {
-    plant.AddRigidBody(std::string(name), inertia);
+    return plant.AddRigidBody(std::string(name), inertia);
+  }
+
+   void multibody_plant_add_revolute_joint(MultibodyPlant64 &plant,  rust::String name, const RigidBody64&  body)
+  {
+    plant.AddJoint<drake::multibody::RevoluteJoint>(std::string(name), plant.world_body(), {}, body, {}, Eigen::Vector3d::UnitZ());
   }
 
   void multibody_plant_finalize(MultibodyPlant64 &plant)
