@@ -1,10 +1,6 @@
-[package]
-name = "drake-sys"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-cxx = "1.0"
-
-[build-dependencies]
-cxx-build = "1.0"
+[workspace]
+resolver = "2"
+members = [
+    "crates/controlkit",
+    "crates/drake-sys"
+]

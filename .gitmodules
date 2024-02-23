@@ -1,6 +1,3 @@
-[submodule "eigen"]
-	path = eigen
-	url = https://gitlab.com/libeigen/eigen
 [submodule "fmt"]
-	path = fmt
+	path = drake-sys/fmt
 	url = https://github.com/fmtlib/fmt

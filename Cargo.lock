@@ -19,6 +19,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "controlkit"
+version = "0.1.0"
+dependencies = [
+ "cxx",
+ "drake-sys",
+]
+
+[[package]]
 name = "cxx"
 version = "1.0.117"
 source = "registry+https://github.com/rust-lang/crates.io-index"

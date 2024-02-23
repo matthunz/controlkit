@@ -1,0 +1,4 @@
+/target
+/ffi/
+/drake
+/*.tar.gz
