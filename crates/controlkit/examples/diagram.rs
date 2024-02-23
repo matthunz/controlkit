@@ -1,7 +1,12 @@
-use controlkit::{Diagram, Integrator, MultibodyPlant};
+use controlkit::{Diagram, Integrator, MultibodyPlant, SpatialInertia};
+use nalgebra::Vector3;
 
 fn main() {
     let mut plant = MultibodyPlant::new(2.);
+    plant.add_rigid_body(
+        "body1",
+        &SpatialInertia::point_mass(20., Vector3::default()),
+    );
     plant.finalize();
 
     let mut builder = Diagram::builder();

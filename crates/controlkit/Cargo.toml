@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 cxx = { version = "1.0.0" }
 drake-sys = { path = "../drake-sys" }
+nalgebra = "0.32.4"

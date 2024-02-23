@@ -12,6 +12,23 @@ mod ffi {
             diagram: &Diagram64,
         ) -> f64;
 
+        type SpatialInertia;
+
+        fn new_spatial_inertia() -> UniquePtr<SpatialInertia>;
+
+        fn new_spatial_inertia_point_mass(
+            mass: f64,
+            x: f64,
+            y: f64,
+            z: f64,
+        ) -> UniquePtr<SpatialInertia>;
+
+        fn multibody_plant_add_rigid_body(
+            name: String,
+            plant: Pin<&mut MultibodyPlant64>,
+            inertia: &SpatialInertia,
+        );
+
         fn multibody_plant_finalize(plant: Pin<&mut MultibodyPlant64>);
 
         type Diagram64;

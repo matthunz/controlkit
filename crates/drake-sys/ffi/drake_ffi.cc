@@ -1,5 +1,7 @@
 #include "drake-sys/ffi/include/drake_ffi.h"
 #include "rust/cxx.h"
+#include "Eigen/Core"
+#include "Eigen/Dense"
 
 namespace drake_bridge
 {
@@ -12,6 +14,11 @@ namespace drake_bridge
   {
     auto cx = diagram.CreateDefaultContext();
     return plant.CalcTotalMass(plant.GetMyContextFromRoot(*cx));
+  }
+
+  void multibody_plant_add_rigid_body(rust::String name, MultibodyPlant64 &plant, const SpatialInertia &inertia)
+  {
+    plant.AddRigidBody(std::string(name), inertia);
   }
 
   void multibody_plant_finalize(MultibodyPlant64 &plant)
@@ -34,7 +41,7 @@ namespace drake_bridge
     builder.AddSystem(std::move(integrator));
   }
 
-  MultibodyPlant64* diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant)
+  MultibodyPlant64 *diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant)
   {
     return builder.AddSystem(std::move(plant));
   }
@@ -49,4 +56,17 @@ namespace drake_bridge
     return diagram.GetGraphvizString();
   }
 
+
+
+  std::unique_ptr<SpatialInertia> new_spatial_inertia()
+  {
+    return std::make_unique<SpatialInertia>();
+  }
+
+  std::unique_ptr<SpatialInertia> new_spatial_inertia_point_mass(double mass, double x, double y, double z)
+  {
+    Eigen::Vector3d com(x, y, z);
+
+    return std::make_unique<SpatialInertia>(SpatialInertia::PointMass(mass, com));
+  }
 }

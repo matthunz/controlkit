@@ -1,4 +1,4 @@
-use crate::{diagram::DiagramBuilder, Diagram, System};
+use crate::{diagram::DiagramBuilder, Diagram, SpatialInertia, System};
 use cxx::UniquePtr;
 
 pub struct MultibodyPlant {
@@ -10,6 +10,19 @@ impl MultibodyPlant {
         Self {
             raw: drake_sys::new_multibody_plant_64(ts),
         }
+    }
+
+    pub fn add_rigid_body(
+        &mut self,
+        name: impl Into<String>,
+        inertia: &SpatialInertia,
+    ) -> &mut Self {
+        drake_sys::multibody_plant_add_rigid_body(
+            name.into(),
+            self.raw.as_mut().unwrap(),
+            &inertia.raw,
+        );
+        self
     }
 
     pub fn finalize(&mut self) {

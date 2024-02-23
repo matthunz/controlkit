@@ -3,6 +3,7 @@
 #include "drake/multibody/plant/multibody_plant.h"
 #include "drake/systems/framework/diagram_builder.h"
 #include "drake/systems/primitives/integrator.h"
+#include "Eigen/Core"
 
 namespace drake_bridge
 {
@@ -16,6 +17,18 @@ namespace drake_bridge
 
   double multibody_plant_calc_total_mass_diagram(const MultibodyPlant64 &plant, const Diagram64 &diagram);
 
+  
+  
+  using SpatialInertia = drake::multibody::SpatialInertia<double>;
+
+  std::unique_ptr<SpatialInertia> new_spatial_inertia();
+
+  std::unique_ptr<SpatialInertia> new_spatial_inertia_point_mass(double mass, double x, double y, double z);
+
+
+
+  void multibody_plant_add_rigid_body(rust::string name, MultibodyPlant64 &plant, const SpatialInertia &inertia);
+
   void multibody_plant_finalize(MultibodyPlant64 &plant);
 
   std::unique_ptr<DiagramBuilder64> new_diagram_builder_64();
@@ -28,7 +41,7 @@ namespace drake_bridge
 
   void diagram_builder_add_system_integrator(DiagramBuilder64 &builder, std::unique_ptr<Integrator> integrator);
 
-  MultibodyPlant64* diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant);
+  MultibodyPlant64 *diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant);
 
   rust::string diagram_get_graphviz_string(const Diagram64 &diagram);
 }
