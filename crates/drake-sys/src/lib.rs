@@ -27,6 +27,12 @@ mod ffi {
             builder: Pin<&mut DiagramBuilder64>,
             integrator: UniquePtr<Integrator>,
         );
+
+        fn diagram_builder_add_system_multibody_plant(
+            builder: Pin<&mut DiagramBuilder64>,
+            plant: UniquePtr<MultibodyPlant64>,
+        );
+
     }
 }
 

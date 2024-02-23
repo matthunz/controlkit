@@ -1,8 +1,13 @@
-use controlkit::{DiagramBuilder, Integrator};
+use controlkit::{Diagram, Integrator, MultibodyPlant};
 
 fn main() {
-    let mut builder = DiagramBuilder::new();
+    let mut plant = MultibodyPlant::new(2.);
+    plant.finalize();
+
+    let mut builder = Diagram::builder();
     builder.add_system(Integrator::default());
+    builder.add_system(plant);
+
     let diagram = builder.build();
     print!("{}", diagram.graphviz());
 }

@@ -28,6 +28,11 @@ namespace drake_bridge
     builder.AddSystem(std::move(integrator));
   }
 
+  void diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant)
+  {
+    builder.AddSystem(std::move(plant));
+  }
+
   std::unique_ptr<Diagram64> diagram_builder_build(DiagramBuilder64 &builder)
   {
     return std::unique_ptr(builder.Build());
@@ -37,4 +42,5 @@ namespace drake_bridge
   {
     return diagram.GetGraphvizString();
   }
+
 }

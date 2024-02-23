@@ -26,5 +26,7 @@ namespace drake_bridge
 
   void diagram_builder_add_system_integrator(DiagramBuilder64 &builder, std::unique_ptr<Integrator> integrator);
 
+  void diagram_builder_add_system_multibody_plant(DiagramBuilder64 &builder, std::unique_ptr<MultibodyPlant64> plant);
+
   rust::string diagram_get_graphviz_string(const Diagram64 &diagram);
 }

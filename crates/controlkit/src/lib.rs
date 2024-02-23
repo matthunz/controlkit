@@ -1,72 +1,13 @@
-use cxx::UniquePtr;
+pub mod diagram;
+pub use self::diagram::Diagram;
+use diagram::DiagramBuilder;
 
-pub struct DiagramBuilder {
-    raw: UniquePtr<drake_sys::DiagramBuilder64>,
-}
+mod integrator;
+pub use self::integrator::Integrator;
 
-impl DiagramBuilder {
-    pub fn new() -> Self {
-        Self {
-            raw: drake_sys::new_diagram_builder_64(),
-        }
-    }
-
-    pub fn add_system(&mut self, system: impl System) {
-        system.add(self);
-    }
-
-    pub fn build(&mut self) -> Diagram {
-        Diagram {
-            raw: drake_sys::diagram_builder_build(self.raw.as_mut().unwrap()),
-        }
-    }
-}
-
-pub struct Diagram {
-    raw: UniquePtr<drake_sys::Diagram64>,
-}
-
-impl Diagram {
-    pub fn graphviz(&self) -> String {
-        drake_sys::diagram_get_graphviz_string(&self.raw)
-    }
-}
-
-pub struct MultibodyPlant {
-    raw: UniquePtr<drake_sys::MultibodyPlant64>,
-}
-
-impl MultibodyPlant {
-    pub fn new(ts: f64) -> Self {
-        Self {
-            raw: drake_sys::new_multibody_plant_64(ts),
-        }
-    }
-
-    pub fn finalize(&mut self) {
-        let ptr = self.raw.as_mut().unwrap();
-        drake_sys::multibody_plant_finalize(ptr)
-    }
-}
+mod multibody_plant;
+pub use multibody_plant::MultibodyPlant;
 
 pub trait System {
     fn add(self, builder: &mut DiagramBuilder);
-}
-
-pub struct Integrator {
-    raw: UniquePtr<drake_sys::Integrator>,
-}
-
-impl Default for Integrator {
-    fn default() -> Self {
-        Self {
-            raw: drake_sys::new_integrator(),
-        }
-    }
-}
-
-impl System for Integrator {
-    fn add(self, builder: &mut DiagramBuilder) {
-        drake_sys::diagram_builder_add_system_integrator(builder.raw.as_mut().unwrap(), self.raw);
-    }
 }
