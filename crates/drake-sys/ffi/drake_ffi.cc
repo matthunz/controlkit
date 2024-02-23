@@ -4,6 +4,9 @@
 #include "Eigen/Dense"
 #include "drake/multibody/tree/revolute_joint.h"
 #include <drake/multibody/inverse_kinematics/inverse_kinematics.h>
+#include <drake/solvers/mathematical_program.h>
+#include <drake/solvers/mathematical_program_result.h>
+#include <drake/solvers/snopt_solver.h>
 
 namespace drake_bridge
 {
@@ -92,5 +95,22 @@ namespace drake_bridge
   std::unique_ptr<InverseKinematics> new_inverse_kinematics(const MultibodyPlant64& plant)
   {
     return std::make_unique<InverseKinematics>(plant, true);
+  }
+
+  rust::Vec<double> inverse_kinematics_solve(const InverseKinematics& ik, const MultibodyPlant64& plant) {
+    // Set the initial guess for the joint positions (adjust as needed)
+    Eigen::VectorXd initial_guess = Eigen::VectorXd::Zero(plant.num_positions());
+
+    drake::solvers::SnoptSolver solver;
+    drake::solvers::MathematicalProgramResult result = solver.Solve(ik.prog(), initial_guess);
+
+    Eigen::VectorXd joint_positions = result.GetSolution();
+
+    rust::Vec<double> data;
+    for (int i = 0; i < joint_positions.size(); ++i) {
+        data.push_back(joint_positions[i]);
+    }
+
+    return data;
   }
 }

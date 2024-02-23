@@ -24,7 +24,7 @@ fn main() {
 
     joint1.frame_on_parent();
 
-    let _ik = InverseKinematics::new(&plant_handle);
+    let ik = InverseKinematics::new(&plant_handle);
 
-    dbg!(plant_handle.total_mass(&diagram));
+    dbg!(ik.solve(&plant_handle));
 }

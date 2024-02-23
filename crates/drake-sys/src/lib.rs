@@ -76,6 +76,8 @@ mod ffi {
         type InverseKinematics;
 
         fn new_inverse_kinematics(plant: &MultibodyPlant64) -> UniquePtr<InverseKinematics>;
+
+        fn inverse_kinematics_solve(ik: &InverseKinematics, plant: &MultibodyPlant64) -> Vec<f64>;
     }
 }
 

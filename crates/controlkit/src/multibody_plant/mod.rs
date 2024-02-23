@@ -105,4 +105,8 @@ impl InverseKinematics {
             ptr: drake_sys::new_inverse_kinematics(unsafe { &*plant.ptr }),
         }
     }
+
+    pub fn solve(&self, plant: &MultibodyPlantHandle) -> Vec<f64> {
+        drake_sys::inverse_kinematics_solve(&self.ptr, unsafe { &*plant.ptr })
+    }
 }

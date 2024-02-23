@@ -63,4 +63,6 @@ namespace drake_bridge
   /* -------------------------InverseKinematics------------------------- */
 
   std::unique_ptr<InverseKinematics> new_inverse_kinematics(const MultibodyPlant64& plant);
+
+  rust::Vec<double> inverse_kinematics_solve(const InverseKinematics& ik, const MultibodyPlant64& plant);
 }
